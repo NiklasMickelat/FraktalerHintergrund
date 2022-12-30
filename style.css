@@ -38,6 +38,15 @@ p {
     transform: translate(-50%, 0);
 }
 
+#labelTotalLines {
+    padding: 10px 20px;
+    border-radius: 50px;
+    color: white;
+    background-color: black;
+    user-select: none;
+}
+
+
 .glowSchatten {
     animation: glowSchatten 0.1s ease-in-out;
 }
