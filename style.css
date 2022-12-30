@@ -1,3 +1,10 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
 canvas {
     background-color: black;
     position: absolute;
@@ -5,4 +12,22 @@ canvas {
     left: 0;
     width: 100%;
     height: 100%;
+}
+
+
+#generiereBaum {
+    font-size: 100%;
+    width: 20vw;
+    margin: auto 40%;
+    position: absolute;
+    border: none;
+    bottom: 5%;
+    z-index: 1;
+    padding: 20px 30px;
+    border-radius: 50px;
+    transition: 0.2s ease-in-out;  
+}
+
+#generiereBaum:hover {
+    background-color: gray;
 }
