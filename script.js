@@ -7,12 +7,21 @@ canvas.height = window.innerHeight;
 console.log("Initiale Canvas Größe: " + canvas.width + "/" + canvas.height);
 const ctx = canvas.getContext("2d");
 
+
+// a Tag
+const labelBranchAngle = document.getElementById("labelBranchAngle");
+const labelRekursionsTiefe = document.getElementById("labelRekursionsTiefe");
+
 // Button
 const generateButton = document.getElementById("generiereBaum");
 
+
 // Fraktalattributes
-const maxLevel = 5;
-const branches = 2;
+var rekursionsLevel = 10;
+var branches = 2;
+var branchAngle = 10;
+var bodyColor = "gray";
+var leaveColor = "red";
 
 //#endregion Globals
 
@@ -21,9 +30,9 @@ const branches = 2;
 
 //#region Functions
 
-function drawTree(startX, startY, len, angle, branchWidth, bodyColor, leaveColor){
+function drawTree(startX, startY, len, angle, branchWidth){
     //starX and Y: Punkt von dem aus der Baum wächst
-    //len: länger der ersten Linie
+    //len: Länge der ersten Linie
     //angle: Winkel
     //branchWidth: für die Breite der Linien
 
@@ -46,7 +55,7 @@ function drawTree(startX, startY, len, angle, branchWidth, bodyColor, leaveColor
 
 
     // damit die Rekursion ein Limit hat
-    if (len < maxLevel) {
+    if (len < rekursionsLevel) {
         ctx.restore(); //dropped alle (eine) Veränderungen seit dem letzten ctx.save() auf dem Canvas Stack
         return;
     }
@@ -54,11 +63,9 @@ function drawTree(startX, startY, len, angle, branchWidth, bodyColor, leaveColor
     // Rekursion:
     // StartPunkt ist immer noch 0, aber die Länge der Linie wird in jeder Iteration um 0,25 kleiner
     // Der Winkel wird in jeder iteration um 5 grad stärker, die Ast-Breite bleibt die gleiche
-    drawTree(0, -len, len * 0.7, angle + 7, branchWidth);
+    drawTree(0, -len, len * 0.7, angle + branchAngle, branchWidth);
     // es sollen zwei Äste entstehen, der 2. in die entgegengesetzte Richtung
-    drawTree(0, -len, len * 0.7, angle - 7, branchWidth);
-
-
+    drawTree(0, -len, len * 0.7, angle - branchAngle, branchWidth);
 
     // nach jeder Iteration, zurück wohin???
     ctx.restore();
@@ -68,16 +75,21 @@ function drawTree(startX, startY, len, angle, branchWidth, bodyColor, leaveColor
 
 
 
+
+
 //#region Main
 
-drawTree(canvas.width/2, canvas.height, canvas.height / 4, 0, 1, "gray", "red");
-
-
+drawTree(canvas.width/2, canvas.height, canvas.height / 4, 0, 1);
+labelBranchAngle.innerHTML = "BranchAngle: " +branchAngle;
+labelRekursionsTiefe.innerHTML = "RekursionsTiefe: " +rekursionsLevel;
 
 //#endregion Main
 
-window.addEventListener('mousemove', (e) => {
 
+
+
+
+window.addEventListener('mousemove', (e) => {
 
     // Winkel durch Bewegung auf der X-Achse
     if (e.x > (canvas.width / 2)) {
@@ -89,33 +101,67 @@ window.addEventListener('mousemove', (e) => {
 
     
     // Länge der Äste durch Bewegung auf der Y-Achse
-    yPercent = 1 - ( e.y / canvas.height )
-    len = yPercent * (canvas.height / 4)
+    yPercent = 1 - ( e.y / canvas.height );
+    len = yPercent * (canvas.height / 4);
 
     
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    drawTree(canvas.width/2, canvas.height, len, angle, 1, "gray", "red");
 
+    drawTree(canvas.width/2, canvas.height, len, angle, 1);
 });
+
+
+window.addEventListener("contextmenu", (e) => {
+    labelBranchAngle.classList.toggle("glowSchatten");
+
+    branchAngle--;
+    labelBranchAngle.innerHTML = "BranchAngle: " +branchAngle;
+    e.preventDefault();
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    drawTree(canvas.width/2, canvas.height, len, angle, 1);
+});
+
+window.addEventListener("click", () => {
+
+    labelBranchAngle.classList.toggle("glowSchatten");
+
+    branchAngle++;
+    labelBranchAngle.innerHTML = "BranchAngle: " +branchAngle;
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    drawTree(canvas.width/2, canvas.height, len, angle, 1);
+});
+
+window.addEventListener("mousedown", () => {
+    labelBranchAngle.classList.toggle("glowSchatten");
+});
+
 
 
 // Funktion bringt nix, weil keine animate() verwendet
 window.addEventListener("wheel", (e) => {
+
+    labelRekursionsTiefe.innerHTML = "RekursionsTiefe: " + rekursionsLevel;
+    labelRekursionsTiefe.classList.toggle("glowSchatten");
+
     //MouseWheel Runter
-    if (e.deltaY > 0) {
-        maxLevel--
-        if(maxLevel <= 0){
-            maxLevel = 0
+    if (e.deltaY < 0) {
+        rekursionsLevel++;
+        if(rekursionsLevel >= 40){
+            rekursionsLevel = 40;
         }
     }
 
     //MouseWheel Hoch
-    if (e.deltaY < 0) {
-        maxLevel++
-        if(maxLevel >= 5){
-            maxLevel = 5
+    if (e.deltaY > 0) {
+                rekursionsLevel--;
+        if(rekursionsLevel <= 4){
+            rekursionsLevel = 4;
         }
     }
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    drawTree(canvas.width/2, canvas.height, len, angle, 1);
 });
 
 
