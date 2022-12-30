@@ -87,9 +87,9 @@ function drawTree(startX, startY, len, angle, branchWidth){
 //#region Main
 
 drawTree(canvas.width/2, canvas.height, canvas.height / 4, 0, 1);
-console.log("Gerenderte Linien: " + totalLines)
 labelBranchAngle.innerHTML = "BranchAngle: " +branchAngle;
 labelRekursionsTiefe.innerHTML = "BranchLenInPx: " +branchLenInPx;
+labelTotalLines.innerHTML = "TotalLines: " +totalLines;
 
 //#endregion Main
 
@@ -109,12 +109,10 @@ window.addEventListener('mousemove', (e) => {
     else{
         angle =  ( 1 - (e.x / (canvas.width / 2)) ) * -40;
     }
-
     
     // Länge der Äste durch Bewegung auf der Y-Achse
     yPercent = 1 - ( e.y / canvas.height );
     len = yPercent * (canvas.height / 4);
-
     
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -122,8 +120,10 @@ window.addEventListener('mousemove', (e) => {
 });
 
 
+
 // Rechts- & Links-Klick
 window.addEventListener("contextmenu", (e) => {
+    
     labelBranchAngle.classList.toggle("glowSchatten");
 
     branchAngle--;
@@ -153,6 +153,9 @@ window.addEventListener("mousedown", () => {
 window.addEventListener("wheel", (e) => {
 
     labelRekursionsTiefe.innerHTML = "BranchLenInPx: " + branchLenInPx;
+    
+    labelTotalLines.innerHTML = "TotalLines: " +totalLines;
+    totalLines = 0;
 
     labelRekursionsTiefe.classList.toggle("glowSchatten");
 
@@ -167,14 +170,13 @@ window.addEventListener("wheel", (e) => {
     //MouseWheel Hoch
     if (e.deltaY > 0) {
         branchLenInPx--;
-        if(branchLenInPx <= 4){
-            branchLenInPx = 4;
+        if(branchLenInPx <= 1){
+            branchLenInPx = 1;
         }
     }
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     drawTree(canvas.width/2, canvas.height, len, angle, 1);
 });
-
 
 window.addEventListener("resize",() => {
     canvas.width = window.innerWidth;
