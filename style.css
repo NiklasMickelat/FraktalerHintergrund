@@ -5,6 +5,15 @@
     font-family: "consolas";
 }
 
+h1 {
+    position: fixed;
+    padding: 10px 30px;
+    color: white;
+    background-color: black;
+    user-select: none; 
+    font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
 canvas {
     background-color: black;
     top: 0;
@@ -71,7 +80,7 @@ p {
 
 
 .glowSchatten {
-    animation: glowSchatten 0.3s ease-in-out;
+    animation: glowSchatten 0.2s ease-in-out;
 }
 
 @keyframes glowSchatten {
@@ -80,7 +89,7 @@ p {
     }
 
     50% {
-        box-shadow: 1px 1px 10px 5px white;
+        box-shadow: 1px 1px 10px 20px white;
     }
 
     100% {

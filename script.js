@@ -1,14 +1,22 @@
 
 /** TODO's
+ * 
  * 1. Astlänge soll jedesmal in einem gewissen Rahmen random sein
+ *      1.1 Slider für Astlänge in %
  * 2. Farbe
+ *      2.1 Farbe soll zunehmen, z.B. von Schwarz nach Grün
  * 3. Nur die letzten Blätter viel Dicker oder in einer anderen geometrischen Form
  * 4. 2x Bäume gleichzeitig
  *      4.1 So viel Bäume wie gut aufs Canvas passen (bei 3x Monitor dann mehr)
  * 
+ * Einige Ideen von: https://linz.coderdojo.net/uebungsanleitungen/programmieren/web/svg-fraktalbaum/
+ * 
  * BUG's
  * 1. linienCounter vergisst die Blätter (könnte man einfach draufrechnen)
+ * 2. Winkel mitteln sich nicht zur Gabelung
  * 
+ * 
+ * Vorlesung zu Fraktalen: https://docplayer.org/52048053-Fraktale-geometrie-chaos-und-ordnung.html 
  * 
  */
 
