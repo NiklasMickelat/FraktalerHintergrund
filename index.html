@@ -13,11 +13,24 @@
 <body>
     
     <canvas></canvas>
-    
-    <p id="labelBranchAngle" >BranchAngle: </p>
-    <p id="labelRekursionsTiefe" >RekursionsTiefe: </p>
 
     <p id="labelTotalLines" >TotalLines: </p>
+
+    <div id="divMetriken"> 
+        <p id="labelBranchAngle" >BranchAngle: </p>
+        <p id="labelRekursionsTiefe" >RekursionsTiefe: </p>
+
+        <div id="divSliderBranchWidth">
+            <p>BranchWidthIncrease</p>
+            <input type="range" min="1" max="100" value="10" class="slider" id="sliderBranchWidth">
+            <p id="labelBranchWidthPercent">10%</p>
+        </div> 
+    </div>
+    
+    
+    
+
+    
 
     <!-- <a id="generiereBaum"> Fraktaler Baum!</a> -->
 

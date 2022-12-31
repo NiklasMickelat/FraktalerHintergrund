@@ -2,53 +2,76 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    background-color: white;
+    font-family: "consolas";
 }
 
 canvas {
     background-color: black;
-    position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
+    position: absolute;
+    z-index: -1;
 }
 
+
+#divMetriken {
+    width: 20vw;
+    margin: 1% auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+    opacity: 0.7;
+}
+
+
 p {
-    z-index: 1;
-    position: absolute;
     text-align: center;
     font-size: 100%;
-    font-family: "consolas";
     padding: 10px 20px;
     border-radius: 50px;
     background-color: white;
     user-select: none;
+    margin: 2%;
 }
 
-#labelBranchAngle {
-    top: 2%;
-    left: 50%;
-    transform: translate(-50%, 0);
+#divSliderBranchWidth {
+    display: flex;
+    flex-direction: column;
+    align-items: left;
+    background-color: white;
+    padding: 0% 5%;
+    border-radius: 20px 20px;
+    margin: 2%;
 }
 
-#labelRekursionsTiefe {
-    top: 6%;
-    left: 50%;
-    transform: translate(-50%, 0);
+#divSliderBranchWidth input {
+    padding: 0;
 }
+
+#divSliderBranchWidth p {
+    color: black;
+    text-align: left;
+    padding: 0%;
+    background-color: transparent;
+}
+
 
 #labelTotalLines {
+    position: fixed;
+    bottom: 0;
     padding: 10px 20px;
-    border-radius: 50px;
     color: white;
     background-color: black;
     user-select: none;
 }
 
 
+
 .glowSchatten {
-    animation: glowSchatten 0.5s ease-in-out;
+    animation: glowSchatten 0.3s ease-in-out;
 }
 
 @keyframes glowSchatten {
@@ -63,23 +86,4 @@ p {
     100% {
         box-shadow: none;
     }
-}
-
-
-#generiereBaum {
-    text-align: center;
-    font-size: 100%;
-    width: 20vw;
-    margin: auto 40%;
-    position: absolute;
-    border: none;
-    bottom: 5%;
-    z-index: 1;
-    padding: 20px 30px;
-    border-radius: 50px;
-    transition: 0.2s ease-in-out;  
-}
-
-#generiereBaum:hover {
-    background-color: gray;
 }
