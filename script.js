@@ -8,11 +8,13 @@
  * 3. Nur die letzten Blätter viel Dicker oder in einer anderen geometrischen Form
  * 4. 2x Bäume gleichzeitig
  *      4.1 So viel Bäume wie gut aufs Canvas passen (bei 3x Monitor dann mehr)
+ * 5. Bäume sollen dort gezeichnet werden, wo man hinklickt, aber animiert und nicht plötzlich.
  * 
  * Einige Ideen von: https://linz.coderdojo.net/uebungsanleitungen/programmieren/web/svg-fraktalbaum/
  * 
  * BUG's
  * 1. linienCounter vergisst die Blätter (könnte man einfach draufrechnen)
+ * 2. Wenn der Slider bewegt wird, triggert der Mausklick event Handler
  * 2. Winkel mitteln sich nicht zur Gabelung
  * 
  * 
@@ -53,6 +55,8 @@ var branchWidthIncrease = 1.0;
 var treeHightDivident = 4;
 
 var totalLines = 0;
+
+var onSlider = false;
 
 //#endregion Globals
 
@@ -131,16 +135,22 @@ labelTotalLines.innerHTML = "TotalLines: " +totalLines;
 
 //#region EventListener
 
+//slider
 sliderBranchWidth.addEventListener("input", ()=>{
     labelBranchWidthPercent.innerHTML = sliderBranchWidth.value +"%" ;
 
     branchWidthIncrease = 1.0 + (sliderBranchWidth.value / 100);
+
+    onSlider = false;
+});
+sliderBranchWidth.addEventListener("mouseover", () => {
+    onSlider = true;
 });
 
 
+// Window Listener ...
 
-// Window Listener 
-
+// Mousemove
 window.addEventListener('mousemove', (e) => {
 
     labelTotalLines.innerHTML = "TotalLines: " +totalLines;
@@ -177,6 +187,8 @@ window.addEventListener("contextmenu", (e) => {
 });
 window.addEventListener("click", () => {
 
+    if(onSlider) return;
+
     labelBranchAngle.classList.toggle("glowSchatten");
 
     branchAngle++;
@@ -186,9 +198,10 @@ window.addEventListener("click", () => {
     drawTree(canvas.width/2, canvas.height, len, angle, 1);
 });
 window.addEventListener("mousedown", () => {
+    if(onSlider) return;
+
     labelBranchAngle.classList.toggle("glowSchatten");
 });
-
 
 // Funktion bringt nix, weil keine animate() verwendet
 window.addEventListener("wheel", (e) => {
