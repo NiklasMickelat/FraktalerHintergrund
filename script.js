@@ -1,6 +1,7 @@
-
 /** TODO's
  * 
+ * 
+ * 1. Slider für Astlängen-Abnahme in %
  * 1. Astlänge soll jedesmal in einem gewissen Rahmen random sein
  *      1.1 Slider für Astlänge in %
  * 2. Farbe
@@ -24,7 +25,6 @@
 
 
 
-
 //#region Globals
 
 // Canvas
@@ -35,14 +35,16 @@ console.log("Initiale Canvas Größe: " + canvas.width + "/" + canvas.height);
 const ctx = canvas.getContext("2d");
 
 
-// p Tags
+// p Tags / Label
 const labelBranchAngle = document.getElementById("labelBranchAngle");
 const labelRekursionsTiefe = document.getElementById("labelRekursionsTiefe");
 const labelTotalLines = document.getElementById("labelTotalLines");
 const labelBranchWidthPercent = document.getElementById("labelBranchWidthPercent");
+const labelBranchLengthDecrease = document.getElementById("labelBranchLengthDecrease");
 
 // Slider
 const sliderBranchWidth = document.getElementById("sliderBranchWidth");
+const sliderBranchLengthDecrease = document.getElementById("sliderBranchLengthDecrease");
 
 
 // Fraktalattributes
@@ -52,11 +54,9 @@ var branchAngle = 10;
 var bodyColor = "gray";
 var leaveColor = "red";
 var branchWidthIncrease = 1.0;
+var branchLengthDecrease = 0.7; // resultiert in 30%
 var treeHightDivident = 4;
-
 var totalLines = 0;
-
-var onSlider = false;
 
 //#endregion Globals
 
@@ -102,15 +102,16 @@ function drawTree(startX, startY, len, angle, branchWidth){
     // Rekursion:
     // StartPunkt ist immer noch 0, aber die Länge der Linie wird in jeder Iteration um 30% kleiner
     // Der Winkel wird in jeder iteration um 5 grad stärker, die Ast-Breite bleibt die gleiche
-    drawTree(0, -len, len * 0.7, angle + branchAngle, branchWidth * branchWidthIncrease);
+    drawTree(0, -len, len * branchLengthDecrease, angle + branchAngle, branchWidth * branchWidthIncrease);
     // es sollen zwei Äste entstehen, der 2. in die entgegengesetzte Richtung
-    drawTree(0, -len, len * 0.7, angle - branchAngle, branchWidth * branchWidthIncrease);
+    drawTree(0, -len, len * branchLengthDecrease, angle - branchAngle, branchWidth * branchWidthIncrease);
 
     // "nach jeder Iteration, zurück" wohin???
     ctx.restore();
 }
 
 //#endregion Functions
+
 
 
 
@@ -126,8 +127,9 @@ labelTotalLines.innerHTML = "TotalLines: " +totalLines;
 // Todo
 // so viele drawTree()'s aufrufen wie auf den Canvas passen
 
-
 //#endregion Main
+
+
 
 
 
@@ -140,12 +142,15 @@ sliderBranchWidth.addEventListener("input", ()=>{
     labelBranchWidthPercent.innerHTML = sliderBranchWidth.value +"%" ;
 
     branchWidthIncrease = 1.0 + (sliderBranchWidth.value / 100);
+});
 
-    onSlider = false;
+sliderBranchLengthDecrease.addEventListener("input", ()=>{
+    labelBranchLengthDecrease.innerHTML = sliderBranchLengthDecrease.value +"%" ;
+
+    branchLengthDecrease = 1 - (sliderBranchLengthDecrease.value / 100);
 });
-sliderBranchWidth.addEventListener("mouseover", () => {
-    onSlider = true;
-});
+
+
 
 
 // Window Listener ...
@@ -186,9 +191,6 @@ window.addEventListener("contextmenu", (e) => {
     drawTree(canvas.width/2, canvas.height, len, angle, 1);
 });
 window.addEventListener("click", () => {
-
-    if(onSlider) return;
-
     labelBranchAngle.classList.toggle("glowSchatten");
 
     branchAngle++;
@@ -198,8 +200,6 @@ window.addEventListener("click", () => {
     drawTree(canvas.width/2, canvas.height, len, angle, 1);
 });
 window.addEventListener("mousedown", () => {
-    if(onSlider) return;
-
     labelBranchAngle.classList.toggle("glowSchatten");
 });
 
