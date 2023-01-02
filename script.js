@@ -1,7 +1,6 @@
 /** TODO's
  * 
  * 
- * 1. Slider für Astlängen-Abnahme in %
  * 1. Astlänge soll jedesmal in einem gewissen Rahmen random sein
  *      1.1 Slider für Astlänge in %
  * 2. Farbe
@@ -46,6 +45,9 @@ const labelBranchLengthDecrease = document.getElementById("labelBranchLengthDecr
 const sliderBranchWidth = document.getElementById("sliderBranchWidth");
 const sliderBranchLengthDecrease = document.getElementById("sliderBranchLengthDecrease");
 
+// Checkbox
+const chkboxBranchLengthRandomness = document.getElementById("chkboxBranchLengthRandomness");
+
 
 // Fraktalattributes
 var branchLenInPx = 10;
@@ -57,6 +59,7 @@ var branchWidthIncrease = 1.0;
 var branchLengthDecrease = 0.7; // resultiert in 30%
 var treeHightDivident = 4;
 var totalLines = 0;
+var randomFactor = false; // von 0 bis max 0.5
 
 //#endregion Globals
 
@@ -99,12 +102,15 @@ function drawTree(startX, startY, len, angle, branchWidth){
         totalLines++;
     }
 
+    var random1 = (Math.random()+0.5)
+    if (!randomFactor) random1 = 1; //wenn man keine Randomness will
+
     // Rekursion:
     // StartPunkt ist immer noch 0, aber die Länge der Linie wird in jeder Iteration um 30% kleiner
     // Der Winkel wird in jeder iteration um 5 grad stärker, die Ast-Breite bleibt die gleiche
-    drawTree(0, -len, len * branchLengthDecrease, angle + branchAngle, branchWidth * branchWidthIncrease);
+    drawTree(0, -len, len * (branchLengthDecrease * random1) , angle + branchAngle, branchWidth * branchWidthIncrease);
     // es sollen zwei Äste entstehen, der 2. in die entgegengesetzte Richtung
-    drawTree(0, -len, len * branchLengthDecrease, angle - branchAngle, branchWidth * branchWidthIncrease);
+    drawTree(0, -len, len * (branchLengthDecrease * random1), angle - branchAngle, branchWidth * branchWidthIncrease);
 
     // "nach jeder Iteration, zurück" wohin???
     ctx.restore();
@@ -150,7 +156,10 @@ sliderBranchLengthDecrease.addEventListener("input", ()=>{
     branchLengthDecrease = 1 - (sliderBranchLengthDecrease.value / 100);
 });
 
-
+//checkboxen
+chkboxBranchLengthRandomness.addEventListener("change", () => {
+    randomFactor = !randomFactor;
+});
 
 
 // Window Listener ...
