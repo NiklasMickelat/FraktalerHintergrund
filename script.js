@@ -1,8 +1,12 @@
 /** TODO's
  * 
+ * 1. Increase Slider ergänzen um 2 checkboxen
+ *  1.1 "Down Up" und "Up Down"
  * 
- * 1. Astlänge soll jedesmal in einem gewissen Rahmen random sein
- *      1.1 Slider für Astlänge in %
+ * 2. Angle um asymetrischen Slider ergänzen (Balance zwischen links und rechts)
+ * 
+ * 3. blätter slider von "gar keine" bis "max Größe"
+ * 
  * 2. Farbe
  *      2.1 Farbe soll zunehmen, z.B. von Schwarz nach Grün
  * 3. Nur die letzten Blätter viel Dicker oder in einer anderen geometrischen Form
@@ -10,12 +14,19 @@
  *      4.1 So viel Bäume wie gut aufs Canvas passen (bei 3x Monitor dann mehr)
  * 5. Bäume sollen dort gezeichnet werden, wo man hinklickt, aber animiert und nicht plötzlich.
  * 
+ * 6. Man könnte das mit dem Random Bug fixen, dass der Baum stehen bleibt
+ *      Indem man alle erzeugten Random Faktoren in ein Array schreibt und der drawTree() mitgibt.
+ *      Anstatt einer Checkbox einen Button, der von "AN" zu "AUS" wechselt.
+ *      Bei jedem neuen "AN" wird das Array erneut beschrieben.
+ * 
  * Einige Ideen von: https://linz.coderdojo.net/uebungsanleitungen/programmieren/web/svg-fraktalbaum/
  * 
  * BUG's
- * 1. linienCounter vergisst die Blätter (könnte man einfach draufrechnen)
+ * 1. linienCounter vergisst die Blätter (könnte man einfach draufrechnen?) (oder einfach später ansetzen?)
  * 2. Wenn der Slider bewegt wird, triggert der Mausklick event Handler
- * 2. Winkel mitteln sich nicht zur Gabelung
+ * 3. Winkel mitteln sich nicht zur Gabelung
+ * 4. Mausrad triggert Animation nur bei jedem zweiten?
+ * 5. LengthIncrease limitten des sliders damit performance gut bleibt
  * 
  * 
  * Vorlesung zu Fraktalen: https://docplayer.org/52048053-Fraktale-geometrie-chaos-und-ordnung.html 
@@ -53,7 +64,7 @@ const chkboxBranchLengthRandomness = document.getElementById("chkboxBranchLength
 var branchLenInPx = 10;
 var branches = 2;
 var branchAngle = 10;
-var bodyColor = "gray";
+var bodyColor = "white";
 var leaveColor = "red";
 var branchWidthIncrease = 1.0;
 var branchLengthDecrease = 0.7; // resultiert in 30%
@@ -67,7 +78,6 @@ var randomFactor = false; // von 0 bis max 0.5
 
 
 //#region Functions
-
 function drawTree(startX, startY, len, angle, branchWidth){
     
     //starX and Y: Punkt von dem aus der Baum wächst
@@ -102,15 +112,19 @@ function drawTree(startX, startY, len, angle, branchWidth){
         totalLines++;
     }
 
-    var random1 = (Math.random()+0.5)
-    if (!randomFactor) random1 = 1; //wenn man keine Randomness will
+    var random1 = (Math.random()+0.5);
+    var random2 = (Math.random()+0.5);
+    if (!randomFactor) {
+        random1 = 1;
+        random2 = 1;
+    } //wenn man keine Randomness will
 
     // Rekursion:
     // StartPunkt ist immer noch 0, aber die Länge der Linie wird in jeder Iteration um 30% kleiner
     // Der Winkel wird in jeder iteration um 5 grad stärker, die Ast-Breite bleibt die gleiche
     drawTree(0, -len, len * (branchLengthDecrease * random1) , angle + branchAngle, branchWidth * branchWidthIncrease);
     // es sollen zwei Äste entstehen, der 2. in die entgegengesetzte Richtung
-    drawTree(0, -len, len * (branchLengthDecrease * random1), angle - branchAngle, branchWidth * branchWidthIncrease);
+    drawTree(0, -len, len * (branchLengthDecrease * random2), angle - branchAngle, branchWidth * branchWidthIncrease);
 
     // "nach jeder Iteration, zurück" wohin???
     ctx.restore();
@@ -126,8 +140,8 @@ function drawTree(startX, startY, len, angle, branchWidth){
 //#region Main
 
 drawTree(canvas.width/2, canvas.height, canvas.height / 4, 0, 1);
-labelBranchAngle.innerHTML = "BranchAngle: " +branchAngle;
-labelRekursionsTiefe.innerHTML = "BranchLenInPx: " +branchLenInPx;
+labelBranchAngle.innerHTML = "Angle: " +branchAngle;
+labelRekursionsTiefe.innerHTML = "LastLengthInPx: " +branchLenInPx;
 labelTotalLines.innerHTML = "TotalLines: " +totalLines;
 
 // Todo
@@ -193,7 +207,7 @@ window.addEventListener("contextmenu", (e) => {
     labelBranchAngle.classList.toggle("glowSchatten");
 
     branchAngle--;
-    labelBranchAngle.innerHTML = "BranchAngle: " +branchAngle;
+    labelBranchAngle.innerHTML = "Angle: " +branchAngle;
     e.preventDefault();
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -203,7 +217,7 @@ window.addEventListener("click", () => {
     labelBranchAngle.classList.toggle("glowSchatten");
 
     branchAngle++;
-    labelBranchAngle.innerHTML = "BranchAngle: " +branchAngle;
+    labelBranchAngle.innerHTML = "Angle: " +branchAngle;
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     drawTree(canvas.width/2, canvas.height, len, angle, 1);
@@ -215,7 +229,7 @@ window.addEventListener("mousedown", () => {
 // Funktion bringt nix, weil keine animate() verwendet
 window.addEventListener("wheel", (e) => {
 
-    labelRekursionsTiefe.innerHTML = "BranchLenInPx: " + branchLenInPx;
+    labelRekursionsTiefe.innerHTML = "LastLengthInPx: " + branchLenInPx;
     
     labelTotalLines.innerHTML = "TotalLines: " +totalLines;
     totalLines = 0;
