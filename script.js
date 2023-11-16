@@ -179,7 +179,7 @@ chkboxBranchLengthRandomness.addEventListener("change", () => {
 // Window Listener ...
 
 // Mousemove
-window.addEventListener('mousemove', (e) => {
+document.addEventListener('mousemove', (e) => {
 
     labelTotalLines.innerHTML = "TotalLines: " +totalLines;
     totalLines = 0;
@@ -202,7 +202,7 @@ window.addEventListener('mousemove', (e) => {
 });
 
 // Rechts- & Links-Klick
-window.addEventListener("contextmenu", (e) => {
+document.addEventListener("contextmenu", (e) => {
     
     labelBranchAngle.classList.toggle("glowSchatten");
 
@@ -213,7 +213,7 @@ window.addEventListener("contextmenu", (e) => {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     drawTree(canvas.width/2, canvas.height, len, angle, 1);
 });
-window.addEventListener("click", () => {
+document.addEventListener("click", () => {
     labelBranchAngle.classList.toggle("glowSchatten");
 
     branchAngle++;
@@ -222,12 +222,12 @@ window.addEventListener("click", () => {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     drawTree(canvas.width/2, canvas.height, len, angle, 1);
 });
-window.addEventListener("mousedown", () => {
+document.addEventListener("mousedown", () => {
     labelBranchAngle.classList.toggle("glowSchatten");
 });
 
 // Funktion bringt nix, weil keine animate() verwendet
-window.addEventListener("wheel", (e) => {
+document.addEventListener("wheel", (e) => {
 
     labelRekursionsTiefe.innerHTML = "LastLengthInPx: " + branchLenInPx;
     
@@ -255,7 +255,7 @@ window.addEventListener("wheel", (e) => {
     drawTree(canvas.width/2, canvas.height, len, angle, 1);
 });
 
-window.addEventListener("resize",() => {
+document.addEventListener("resize",() => {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
     console.log("Resize Größe: " + canvas.width + "/" + canvas.height);
